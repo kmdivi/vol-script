@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# for debug
+exec 5> debug_output.txt
+BASH_XTRACEFD="5"
+PS4='$LINENO: '
+set -x
+
 
 if [ -z "$1" -o "$1" == "-h" ]; then
     printf "usage:\n"
