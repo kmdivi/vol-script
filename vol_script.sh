@@ -19,9 +19,15 @@ result_dir="result"
 plugins=(
 "pslist"
 "pstree"
+"psscan"
 "netscan"
 "connscan"
 "dlllist"
+"getsids"
+"cmdscan"
+"consoles"
+"hivelist"
+"malsysproc"
 "sockscan"
 "svcscan --verbose"
 "malfind"
@@ -43,10 +49,13 @@ fi
 for var in "${plugins[@]}"
 do
     echo "${var}......"
-    vol.py -f ${imagename} ${profile} ${var} > "${result_dir}/${var}.txt"
+    vol.py -f ${imagename} ${profile} ${var} | tee "${result_dir}/${var}.txt"
     echo "Done!"
     echo ""
 done
+
+vol.py -f ${imagename} ${profile} shimcache | tee "${result_dir}/shimcache.txt"
+cat shimcache.txt | awk '/^[0-9]{4}/{ if ($4 != "") print $0 | "sort -k4" }' > shimcache-sorted.txt
 
 # Extract memory timeline
 echo "Memory timeline......"
